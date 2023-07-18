@@ -41,7 +41,7 @@ class Pilot(models.Model):
         return self.name
 
     class Meta:
-        indexes = [models.Index(fields=['timestamp'])]
+        indexes = [models.Index(fields=['-name'])]
         ordering = ("-inserted_timestamp",)
 
     def __str__(self):
