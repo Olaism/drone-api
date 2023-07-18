@@ -47,7 +47,7 @@ class Pilot(models.Model):
     def __str__(self):
         return self.name
 
-class Competitions(models.Model):
+class Competition(models.Model):
     pilot = models.ForeignKey(Pilot, related_name='competitions', on_delete=models.CASCADE)
     drone = models.ForeignKey(Drone, related_name='competitions', on_delete=models.CASCADE)
     distance_in_feet = models.IntegerField()
