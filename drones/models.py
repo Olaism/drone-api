@@ -1,7 +1,7 @@
 from django.db import models
 
 class DroneCategory(models.Model):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250, unique=True)
 
     class Meta:
         indexes = [
@@ -10,8 +10,11 @@ class DroneCategory(models.Model):
         ordering = ("name",)
         verbose_name_plural = "Categories"
 
+    def __str__(self):
+        return self.name
+
 class Drone(models.Model):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250, unique=True)
     drone_category = models.ForeignKey(DroneCategory, related_name="drones", on_delete=models.CASCADE)
     manufacturing_date = models.DateTimeField()
     has_it_competed = models.BooleanField(default=False)
@@ -32,7 +35,7 @@ class Pilot(models.Model):
         (MALE, "Male"),
         (FEMALE, "Female")
     )
-    name = models.CharField(max_length=150, blank=False, default='')
+    name = models.CharField(max_length=150, blank=False, unique=True)
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default=MALE)
     races_count = models.PositiveIntegerField()
     inserted_timestamp = models.DateTimeField(auto_now_add=True)

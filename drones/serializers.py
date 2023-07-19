@@ -1,4 +1,5 @@
-from ..models import (
+from rest_framework import serializers
+from .models import (
     Competition,
     DroneCategory,
     Drone,
@@ -35,7 +36,7 @@ class DroneSerializer(serializers.HyperlinkedModelSerializer):
             'inserted_timestamp'
         )
 
-class CompetitionSerializer(serializers.HyperLinkedModelSerializer):
+class CompetitionSerializer(serializers.HyperlinkedModelSerializer):
     drone = DroneSerializer()
 
     class Meta:
@@ -49,7 +50,7 @@ class CompetitionSerializer(serializers.HyperLinkedModelSerializer):
         )
 
 
-class PilotSerializer(serializers.HyperLinkedModelSerializer):
+class PilotSerializer(serializers.HyperlinkedModelSerializer):
     competitions = CompetitionSerializer(many=True, read_only=True)
     gender = serializers.ChoiceField(choices=Pilot.GENDER_CHOICES)
     gender_description = serializers.CharField(

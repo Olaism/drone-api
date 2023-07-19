@@ -11,7 +11,8 @@ from .serializers import (
     DroneCategorySerializer,
     DroneSerializer,
     CompetitionSerializer,
-    PilotSerializer
+    PilotSerializer,
+    PilotCompetitionSerializer
 )
 
 class DroneCategoryList(generics.ListCreateAPIView):
@@ -46,12 +47,12 @@ class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CompetitionList(generics.ListCreateAPIView):
     queryset = Competition.objects.all()
-    serializer_class = CompetitionSerializer
+    serializer_class = PilotCompetitionSerializer
     name = 'competition-list'
 
 class CompetitionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Competition.objects.all()
-    serializer_class = CompetitionSerializer
+    serializer_class = PilotCompetitionSerializer
     name = 'competition-detail'
 
 class ApiRoot(generics.GenericAPIView):
@@ -61,6 +62,6 @@ class ApiRoot(generics.GenericAPIView):
         return Response({
             'drone-categories': reverse(DroneCategoryList.name, request=request),
             'drones': reverse(DroneList.name, request=request),
-            'pilots': reverse(Pilot.name, request=request),
+            'pilots': reverse(PilotList.name, request=request),
             'competitions': reverse(CompetitionList.name, request=request),
         })
