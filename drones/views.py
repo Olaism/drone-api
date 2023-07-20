@@ -1,3 +1,4 @@
+from rest_framework import authentication
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework import permissions
@@ -78,11 +79,15 @@ class PilotList(generics.ListCreateAPIView):
         'name',
         'races_count'
     )
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
 class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pilot.objects.all()
     serializer_class = PilotSerializer
     name = 'pilot-detail'
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
 class CompetitionList(generics.ListCreateAPIView):
     queryset = Competition.objects.all()
