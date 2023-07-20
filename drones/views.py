@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from .filters import CompetitionFilter
@@ -9,6 +10,7 @@ from .models import (
     Drone,
     Pilot
 )
+from .permissions import IsCurrentUserOwnerOrReadOnly
 from .serializers import (
     DroneCategorySerializer,
     DroneSerializer,
@@ -34,6 +36,10 @@ class DroneList(generics.ListCreateAPIView):
     queryset = Drone.objects.all()
     serializer_class = DroneSerializer
     name = 'drone-list'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, 
+        IsCurrentUserOwnerOrReadOnly
+    )
     filterset_fields = (
         'name',
         'drone_category',
@@ -46,10 +52,17 @@ class DroneList(generics.ListCreateAPIView):
         'manufacturing_date'
     )
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 class DroneDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Drone.objects.all()
     serializer_class = DroneSerializer
     name = 'drone-detail'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, 
+        IsCurrentUserOwnerOrReadOnly
+    )
 
 class PilotList(generics.ListCreateAPIView):
     queryset = Pilot.objects.all()
