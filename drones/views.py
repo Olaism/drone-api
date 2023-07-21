@@ -2,6 +2,7 @@ from rest_framework import authentication
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework import permissions
+from rest_framework import throttling
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from .filters import CompetitionFilter
@@ -37,6 +38,8 @@ class DroneList(generics.ListCreateAPIView):
     queryset = Drone.objects.all()
     serializer_class = DroneSerializer
     name = 'drone-list'
+    throttle_classes = (throttling.ScopedRateThrottle,)
+    throttle_scope = 'drones'
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly, 
         IsCurrentUserOwnerOrReadOnly
@@ -64,11 +67,15 @@ class DroneDetail(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticatedOrReadOnly, 
         IsCurrentUserOwnerOrReadOnly
     )
+    throttle_classes = (throttling.ScopedRateThrottle,)
+    throttle_scope = 'drones'
 
 class PilotList(generics.ListCreateAPIView):
     queryset = Pilot.objects.all()
     serializer_class = PilotSerializer
     name = 'pilot-list'
+    throttle_classes = (throttling.ScopedRateThrottle,)
+    throttle_scope = 'pilots'
     filterset_fields = (
         'name',
         'gender',
@@ -88,6 +95,8 @@ class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'pilot-detail'
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
+    throttle_classes = (throttling.ScopedRateThrottle,)
+    throttle_scope = 'pilots'
 
 class CompetitionList(generics.ListCreateAPIView):
     queryset = Competition.objects.all()
